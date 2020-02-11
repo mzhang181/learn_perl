@@ -1,0 +1,251 @@
+======================= Pragmas ===============================================
+
+Statements of the form use foo; are pragmas
+
+; terminates statements and # begins comments.
+Comments last until EOL
+
+============================ Variables ========================================
+
+3 types of variables: 
+scalars - $
+arrays - @
+hashes - %
+
+my keyword declares variables
+
+Scalars can contain:
+- undef (equivalent to null)
+- a number (float or int)
+- a string
+- a reference to any other variable
+
+You can use . to concatenate strings
+
+Booleans do not exist in perl. However, the following scalars evaluate to false
+in an if statement:
+- undef
+- number 0
+- string ""
+- string "0"
+
+We cannot tell whether a scalar contains a number of a string. 
+Scalar will try to behave as required by the program and a warning is raised
+if it is not possible.
+
+Use correct oeprators for the correct situation.
+
+numerical operators: <, >, <=, >=, ==, !=, <=>, +, *
+string operators:	lt,gt, le, ge, eq, ne, cmp, ., X
+
+
+Array variables are a list of scalars indexed at 0.
+They are declared using a parenthesised list of scalars.
+
+we access values from the array as $arrayName[index].
+We indicate it as a scalar as that is value being retrieved.
+
+There is no collision between an identically named variable and array.
+i.e. $var and $var[0]
+
+We can obtain the length of an array by calling (scalar @array)
+We can access the index of the last populated element of the array by calling $#array
+
+The original array of argument passed to the perl script can be accessed with
+@ARGV
+
+Variables can be interpolated into strings. However, using $,@ or % next to text
+will cause Perl to look for that variable. For example @gmail.com
+
+Use single-quotes or a backslash to preserve literal meaning.
+
+
+Hash variable is a dictionary or a map.
+It is a list of scalars indexed by strings.
+It is declared like an array but using => symbol between each key value pair.
+
+We acccess values in a hash using the $ since the values stored are scalars
+i.e. $hash{"key"}
+
+Braces are used to access the value at each index and it has no collision 
+with scalars.
+
+you can easily convert a hash to an array. A hash will be converted into
+an array in key valuepair order.
+i.e. key1 value1 key2 value2
+i.e. my @myarray = %myhash
+
+
+Lists are different from both hashes and arrays. 
+A list is not a variable but an ephemeral value that can be assigned to
+an array or a hash.
+
+Note that => is just a , in disguise.
+Without assignment the definition of a hash or an array is the same. They 
+are both list and the perl interpreter has no way of telling.
+List values annot be nested either. It will flatten the inner list.
+Nested lists don't work because the interpreter cannot tell if
+the inner list is an array or a hash. This also applies to fat commas.
+
+============================================ Context ==========================
+
+All code in perl is context-sensitive.
+
+Every expression in Perl is evaluated either in scalar context or list context
+
+A scalar assignment evalutes in the scalar context.
+
+Array or hash assignment is evaluated in list context.
+
+A scalar expression evaluated in list context is converted implicitly to a 
+single-element list.
+
+A list expression in scalar context returns the final scalar in the list.
+An array expression evaluated as a scalar returns the length of the array
+
+print function can accept an unlimited list of arguments and can be used to print
+arrays directly.
+
+reverse treats arguments as a list and reverses the list.
+When passed a scalar is concatenates the whole list together and then reverses it
+as a single word.
+
+you can use the scalar function to force any expression to be evaluated in scalar context.
+
+========================== References and nested data structures ==============
+
+References are created using a backslash.
+
+To refer to value of the reference, you can place it in some braces.
+i.e. ${ $reference }
+
+You may also just use $$ if the case is not ambiguous
+
+For arrays or hashes you can use -> instead.
+i.e. type{ $ref }[index] or $array->[index]
+
+The same idea applies to hashes.
+
+
+Data structures are often built using references.
+4 examples:
+
+my %owner1 = (
+	"name" => "Santa Claus",
+	"DOB"  => "1882-12-25",
+);
+
+my $owner1Ref = \%owner1;
+
+my %owner2 = (
+	"name" => "Mickey Mouse",
+	"DOB"  => "1928-11-18",
+);
+
+my $owner2Ref = \%owner2;
+
+my @owners = ( $owner1Ref, $owner2Ref );
+
+my $ownersRef = \@owners;
+
+my %account = (
+	"number" => "12345678",
+	"opened" => "2000-01-01",
+	"owners" => $ownersRef,
+);
+
+
+This can all be shortened. We can also declare anonymous arrays and
+hashes using different symbols. Keep in mind the context so you know what
+the variable is holding. (array containing a reference to an array or
+a reference to an array)
+
+================================== Conditionals ===============================
+
+generally we have if else statements as well.
+
+if (condition) {
+	stuff
+} elsif (condition) {
+	stuff
+} else {
+	stuff
+}
+
+we can condense if condition syntax using "statement if condition" syntax
+
+There also exists a frowned up unless ... else ... syntax.
+
+unless (condition) {
+	stuff
+} else {
+	stuff
+}
+
+It is confusing and if else is much more preferred.
+Unless is only used with the shortened statement if condition syntax
+
+
+The ternary operator also exists.
+It is of the form condition ? trueexpression : falsexpression.
+
+
+============================= loops ===========================================
+
+Perl has while and until loops. Both are functionally the same.
+
+while (condition) {
+	stuff
+}
+
+until(condition) {
+	stuff
+}
+
+There is also the do loops which are almost equivalent. 
+
+do {
+	stuff
+} while (condition);
+
+do {
+	stuff
+} until (condition);
+
+The for loop also exists but the scope of any variables declared in the for 
+statement only exist in the for loop.
+
+for(var; condition; action) {
+	stuff
+}
+
+There also exists a foreach loop. It is a synonym for 'for'.
+foreach my var ( iterable ) {
+	stuff
+}
+
+or you can use a range operator for indices or keys operators for hashes.
+
+foreach my var (0 .. array) {
+	stuff
+}
+
+foreach var (keys hash) {
+	stuff
+}
+
+foreach var (sort key hash) {
+	stuff
+}
+iterates through a sorted list of keys.
+
+If no variable name is given, $_ holds the value.
+
+
+Loop control is implemented as next and last.
+We can also have labels which are conventionally written in ALLCAPITALS.
+We can use next and last to target the labels.
+next and last are equivalent to continue and break respectively.
+
+
+================================ Array Functions ==============================
